@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>HW_1_ASP</title>
+    <script src="jquery-3.7.0.js">
+    </script>
+    
+</head>
+<body style='overflow-x:hidden;'/>
+    <body>
+
+        <script>
+
+            let BigBox = document.createElement("div");
+            BigBox.style.display = "flex";
+            BigBox.style.flexDirection = "row";
+            document.body.appendChild(BigBox);
+            let mainbox = document.createElement("div");
+            mainbox.className = "MainBox";
+            mainbox.style.width = "400px";
+            mainbox.style.height = "180px";
+            mainbox.style.backgroundColor = "red";
+            BigBox.appendChild(mainbox);
+            mainbox.style.position = "relative";
+            mainbox.style.top = "10%";
+            mainbox.style.margin = "auto";
+            mainbox.style.borderRadius = "10px"
+            mainbox.style.boxShadow = "0px 0px 10px #000";
+            let inputBox = document.createElement("input");
+            inputBox.type = "text";
+            inputBox.className = "input";
+            inputBox.style.width = "350px";
+            inputBox.style.height = "60px";
+            inputBox.style.backgroundColor = "white";
+            inputBox.style.position = "relative";
+            inputBox.style.top = "10%";
+            inputBox.style.left = "5%";
+            inputBox.style.margin = "auto";
+            inputBox.style.borderRadius = "10px";
+            inputBox.style.boxShadow = "0px 0px 10px #000";
+            mainbox.appendChild(inputBox);
+            inputBox.value = "Введите название фильма";
+            inputBox.style.fontSize = "20px";
+            inputBox.addEventListener("focus", function (event) {
+                if (inputBox.value === "Введите название фильма")
+                    inputBox.value = "";
+            });
+            inputBox.addEventListener("blur", function (event) {
+                if (inputBox.value === "")
+                    inputBox.value = "Введите название фильма";
+            });
+            let btn = document.createElement("button");
+            btn.textContent = "Найти";
+            btn.style.width = "100px";
+            btn.style.height = "30px";
+            btn.style.backgroundColor = "white";
+            btn.style.position = "relative";
+            btn.style.top = "40%";
+            btn.style.left = "38%";
+            btn.style.margin = "auto";
+            btn.style.borderRadius = "10px";
+            btn.style.boxShadow = "0px 0px 10px #000";
+            btn.id = "baget";
+            mainbox.appendChild(btn);
+            btn.onmouseover = function () {
+                btn.style.opacity = "0.8";
+            };
+            btn.onmouseleave = function () {
+                btn.style.opacity = "1";
+            }
+
+
+          
+
+
+
+
+
+
+
+
+
+
+            async function doAjax(url) {
+                let result = await $.getJSON(url);
+                return result;
+            };
+
+
+
+            btn.addEventListener('click', () => {
+                document.getElementById("BoxRes").remove();
+                document.getElementById("BoxResPic").remove();
+                
+            });
+            btn.addEventListener('click' , () => {
+                doAjax("https://www.omdbapi.com/?apikey=b744395f&t=" + inputBox.value)
+                    .then((data) => {
+                       
+                        let boxRes = document.createElement("div");
+                        boxRes.id = "BoxRes";
+                        boxRes.style.width = "400px";
+                        boxRes.style.backgroundColor = "lime";
+                        BigBox.appendChild(boxRes);
+                        boxRes.style.position = "relative";
+                        boxRes.style.borderRadius = "10px"
+                        boxRes.style.boxShadow = "0px 0px 10px #000";
+                        boxRes.style.margin = "auto";
+                        boxRes.style.marginTop = "2%";
+
+
+                        let ulli = document.createElement('ul');
+                        boxRes.append(ulli);
+                        ulli.style.listStyleType = "none";
+                        for (el in data) {
+                            if (el === "Poster" || el === "Ratings") continue;
+                            let li = document.createElement('li');
+                            li.textContent = el + " : " + data[el];
+                            ulli.append(li);
+                        }
+                        let image = document.createElement('img');
+                        
+                        image.src = data["Poster"];
+                        BigBox.appendChild(image);
+                        image.id = "BoxResPic";
+
+
+                    })
+            });
+
+
+
+        </script>
+
+
+
+    </body>
+</html>
